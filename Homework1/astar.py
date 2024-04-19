@@ -42,13 +42,11 @@ def AStar(root: TilesNode, heuristic: callable) -> List[TilesNode]:
         _, _, current_node = unexplored.get()
 
         if current_node.is_goal():
-            # Backtrack to construct the path
-            path = []
+            new_path = []
             while current_node:
-                path.append(current_node)
+                new_path.append(current_node)
                 current_node = current_node.parent
-            return path[::-1]  # Return the path in reverse order
-
+            return new_path[::-1] 
         explored.add(current_node)
 
         for child_node in current_node.get_children():
@@ -64,4 +62,4 @@ def AStar(root: TilesNode, heuristic: callable) -> List[TilesNode]:
                 counter += 1
                 unexplored.put((f_score[child_node], counter, child_node))
 
-    return []  # Return an empty list if no path was found
+    return [] #return empty list

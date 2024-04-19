@@ -65,7 +65,9 @@ class TilesNode:
         empty_row, empty_col = self.find_empty_space()
 
         for down_row, down_col in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+
             new_row, new_col = empty_row + down_row, empty_col + down_col
+            
             if 0 <= new_row < len(self.state) and 0 <= new_col < len(self.state[0]):
                 new_state = self.swap_tiles(empty_row, empty_col, new_row, new_col)
                 # Create a new TilesNode object from the new state
