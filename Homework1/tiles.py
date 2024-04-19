@@ -62,16 +62,19 @@ class TilesNode:
 
     def get_children(self) -> list["TilesNode"]:
         children = []
-        empty_row , empty_col = self.find_empty_space()
+        empty_row, empty_col = self.find_empty_space()
 
-        for down_row,down_col in [(-1,0), (1,0), (0, -1), (0, 1)]:
+        for down_row, down_col in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             new_row, new_col = empty_row + down_row, empty_col + down_col
             if 0 <= new_row < len(self.state) and 0 <= new_col < len(self.state[0]):
                 new_state = self.swap_tiles(empty_row, empty_col, new_row, new_col)
+                # Create a new TilesNode object from the new state
                 child_node = TilesNode(new_state, parent=self)
                 children.append(child_node)
 
         return children
+
+
 
     def __str__(self):
         return "\n".join(" ".join(map(str, row)) for row in self.state)
@@ -102,20 +105,27 @@ class TilesNode:
     def __hash__(self):
         return hash(tuple(map(tuple, self.state)))
 
-    def is_solvable(self): 
+    def is_solvable(self):
+        """
+        Check if the current state is solvable.
+        In a solvable state, the number of inversions must be even.
 
-        flat_state = [tile for row in self.state for tile in row if tile != 0]
+        You don't need to use this function, but it may be helpful.
+
+        From piazza
+        """
+        flat_state = [tile for row in self.state for tile in row]
+
         inversions = 0
-        for i in range(len(flat_state)):
+        for i in range(0, len(flat_state)):
             for j in range(i + 1, len(flat_state)):
-                if flat_state[i] > flat_state[j]:
+                if flat_state[i] != 0 and flat_state[j] != 0 and flat_state[i] > flat_state[j]:
                     inversions += 1
 
         empty_row, _ = self.find_empty_space()
 
         # n is even
-        if (len(self.state) % 2 == 0): 
+        if ((len(self.state)) % 2 == 0):
             return (inversions + empty_row) % 2 == 1
-        # n is odd
-        else: 
-            return (inversions + empty_row) % 2 == 0
+        else: # n is odd
+            return (inversions) % 2 == 0
