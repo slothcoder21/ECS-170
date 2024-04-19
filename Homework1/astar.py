@@ -12,16 +12,25 @@ def heuristic(node: TilesNode) -> int:
     heuristic_value : int
         The heuristic value of the current node.
     """
-    goal_state = [[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,0]]
+    goal_state = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]]
+    h_value = 0
 
-    misplaced_tiles = sum(1 for i in range(len(node.state)) for j in range(len(node.state[i])) if node.state[i][j] != goal_state[i][j])
+    """Comparing the goal to the current state and counting the number of misplaced tiles"""
 
-    return misplaced_tiles
+    for i in range(len(node.state)):
+        for j in range(len(node.state[i])):
+            cur_tile = node.state[i][j]
+            if cur_tile != 0:  # Ignore the empty space
+                goal_row, goal_col = divmod(cur_tile - 1, len(node.state))  # Calculate the goal position of the tile
+                h_value += abs(i - goal_row) + abs(j - goal_col)  # Manhattan distance 
+
+    return h_value
                           
 
 
 def AStar(root, heuristic: callable) -> TilesNode:
-    unexplored = PriorityQueue()
+    unexplored = PriorityQueue() 
+    """passes in tuples"""
     counter = 0
     unexplored.put((0, counter, root))
     explored = set()
