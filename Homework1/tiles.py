@@ -102,19 +102,20 @@ class TilesNode:
     def __hash__(self):
         return hash(tuple(map(tuple, self.state)))
 
-    def is_solvable(self):
-        """
-        Check if the current state is solvable.
-        In a solvable state, the number of inversions must be even.
+    def is_solvable(self): 
 
-        You don't need to use this function, but it may be helpful.
-        """
         flat_state = [tile for row in self.state for tile in row if tile != 0]
-
         inversions = 0
         for i in range(len(flat_state)):
             for j in range(i + 1, len(flat_state)):
                 if flat_state[i] > flat_state[j]:
                     inversions += 1
 
-        return inversions % 2 == 0
+        empty_row, _ = self.find_empty_space()
+
+        # n is even
+        if (len(self.state) % 2 == 0): 
+            return (inversions + empty_row) % 2 == 1
+        # n is odd
+        else: 
+            return (inversions + empty_row) % 2 == 0
