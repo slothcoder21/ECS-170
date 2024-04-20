@@ -27,6 +27,7 @@ def heuristic(node: TilesNode) -> int:
                 goal_row, goal_col = divmod(cur_tile - 1, len(node.state))  
                 #calculates the manhattan distance by |row1 - goalRow| + |col2 - goalCol|
                 h_value += abs(i - goal_row) + abs(j - goal_col) 
+                
     return h_value
                           
 
@@ -41,6 +42,7 @@ def AStar(root: TilesNode, heuristic: callable) -> List[TilesNode]:
     while not unexplored.empty():
         _, _, cur_node = unexplored.get()
 
+        #Backtracking a path from the current node that we are in
         if cur_node.is_goal():
             new_path = []
             while cur_node:
@@ -50,12 +52,14 @@ def AStar(root: TilesNode, heuristic: callable) -> List[TilesNode]:
         
         explored.add(cur_node)
 
+        #checks if the child node has already been explored 
         for child_node in cur_node.get_children():
             if child_node in explored:
                 continue
 
             temp_g_score = g_score[cur_node] + 1
 
+            #checking to make sure that the costs are less than the costs of moving to the child node
             if child_node not in g_score or temp_g_score < g_score[child_node]:
                 child_node.parent = cur_node
                 g_score[child_node] = temp_g_score
@@ -63,4 +67,4 @@ def AStar(root: TilesNode, heuristic: callable) -> List[TilesNode]:
                 counter += 1
                 unexplored.put((f_score[child_node], counter, child_node))
 
-    return [] 
+    return [] #returns an empty list if all nodes have been explored
