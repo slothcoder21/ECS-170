@@ -39,27 +39,28 @@ def AStar(root: TilesNode, heuristic: callable) -> List[TilesNode]:
     f_score = {root: heuristic(root)}
 
     while not unexplored.empty():
-        _, _, current_node = unexplored.get()
+        _, _, cur_node = unexplored.get()
 
-        if current_node.is_goal():
+        if cur_node.is_goal():
             new_path = []
-            while current_node:
-                new_path.append(current_node)
-                current_node = current_node.parent
+            while cur_node:
+                new_path.append(cur_node)
+                cur_node = cur_node.parent
             return new_path[::-1] 
-        explored.add(current_node)
+        
+        explored.add(cur_node)
 
-        for child_node in current_node.get_children():
+        for child_node in cur_node.get_children():
             if child_node in explored:
                 continue
 
-            temp_g_score = g_score[current_node] + 1
+            temp_g_score = g_score[cur_node] + 1
 
             if child_node not in g_score or temp_g_score < g_score[child_node]:
-                child_node.parent = current_node
+                child_node.parent = cur_node
                 g_score[child_node] = temp_g_score
                 f_score[child_node] = temp_g_score + heuristic(child_node)
                 counter += 1
                 unexplored.put((f_score[child_node], counter, child_node))
 
-    return [] #return empty list
+    return [] 
